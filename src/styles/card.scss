@@ -1,9 +1,37 @@
+@use './fonts';
 .card-container {
-    width: fit-content;
-    min-height: 100px;
-    padding: 30px;
+    width: 100px;
+    min-height: 150px;
+    padding: 10px;
     display: flex;
     border: 1px solid black;
     border-radius: 20px;
     flex-direction: row;
+    justify-content: space-between;
+
+    .card-angle {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        user-select: none;
+
+        .card-suit {
+            width: 22px;
+            height: 15px;
+        }
+        .card-value {
+            font-family: "AlegreyaSC-Medium", sans-serif;
+            font-size: 35px;
+        }
+
+        &#up {
+            margin-bottom: auto;
+            
+        }
+        &#down {
+            margin-top: auto;
+            transform: rotate(180deg);
+        }
+    }
 }
