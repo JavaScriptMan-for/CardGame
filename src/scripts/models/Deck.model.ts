@@ -16,6 +16,9 @@ type DeckType =
 export default abstract class Deck {
   public static cards: CardType[] = [];
 
+  public static exits_card: CardType[] = [];
+
+
   private static readonly suits: Suits[] = [
     Suits.PEAK,
     Suits.CROSS,
@@ -31,7 +34,7 @@ export default abstract class Deck {
     joker: Joker,
   };
 
-  public static trump_card: Suits | null = null
+  public static trump_suit: Suits | null = null
 
   public static createDeck(count: number = 1) {
     //Особые карты
@@ -43,13 +46,13 @@ export default abstract class Deck {
         }
       }
     }
-    //Цифровые карты
+    //Числовые карты
     for (let i = 2; i <= 10; i++) {
       for (let j = 0; j < Numeric.count; j++) {
         this.cards.push(new Numeric(this.suits[j], null, i));
       }
     }
-    this.trump_card = this.cards[0].suit ? this.cards[0].suit : Suits.WORMS
+    this.trump_suit = this.cards[0].suit ? this.cards[0].suit : Suits.WORMS
   }
   public static mix() {
     const shuffled = [...this.cards];
@@ -62,5 +65,8 @@ export default abstract class Deck {
   public static takeCard() {
     this.cards.pop()
     console.log('1 карта взята из стопки')
+  }
+  public static dropCards(cards: CardType[]) {
+    this.exits_card.push(...cards)
   }
 }

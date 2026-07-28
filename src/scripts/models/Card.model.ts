@@ -23,6 +23,8 @@ export default class Card {
 
     public player_id: number | null = null;
 
+    public maybe: boolean = false
+
     constructor(suit: Suits, player_id: number | null) {
         this.suit = suit
         this.color = this.suit === Suits.PEAK || this.suit === Suits.CROSS ? Colors.BLACK : Colors.RED

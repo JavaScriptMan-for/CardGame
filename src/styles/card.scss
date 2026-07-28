@@ -1,0 +1,9 @@
+.card-container {
+    width: fit-content;
+    min-height: 100px;
+    padding: 30px;
+    display: flex;
+    border: 1px solid black;
+    border-radius: 20px;
+    flex-direction: row;
+}
