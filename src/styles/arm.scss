@@ -1,0 +1,12 @@
+.arm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    height: fit-content;
+
+    .cards {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;
+    }
+}

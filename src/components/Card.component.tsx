@@ -11,10 +11,10 @@ interface Props {
     value: number,
     suit: Suits | null,
     color: Colors,
-    key?: number
+    defend?: boolean
 }
 
-const CardComponent: FC<Props> = ({ value, suit, color, key }) => {
+const CardComponent: FC<Props> = ({ value, suit, color, defend}) => {
 
     const setSuitSrc = useCallback(() => {
         switch(suit) {
@@ -36,7 +36,7 @@ const CardComponent: FC<Props> = ({ value, suit, color, key }) => {
     }, [value])
 
     return (
-        <div key={key ? key : Date.now()} draggable style={!suit ? { justifyContent: 'center' } : {}} className="card-container">
+        <div draggable style={!suit ? { justifyContent: 'center' } : {}} className={`card-container ${defend && 'defend-card'}`}>
             <div id="up" className="card-angle">
                 <span className="card-value" style={{ color: color }}>{setValueCard()}</span>
                 {suit && <img draggable={false} className="card-suit" src={setSuitSrc()} alt="suit" />}

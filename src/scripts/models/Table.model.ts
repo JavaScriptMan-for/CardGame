@@ -10,6 +10,8 @@ export default abstract class Table {
             this.cards.push(card)
             this.values.push(card.value)
             this.defend_cards.push(undefined)
+            this.cards = [...this.cards] // новая ссылка
+            this.defend_cards = [...this.defend_cards]
         }
     }
 }

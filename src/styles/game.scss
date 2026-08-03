@@ -1,3 +1,16 @@
 #game {
-    
+    display: flex;
+    padding: 25px;
+    flex-direction: row;
+    height: 90vh;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+
+    #table {
+        display: flex;
+        width: 100%;
+        order: 2;
+        height: 25vh;
+    }
 }

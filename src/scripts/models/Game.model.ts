@@ -4,7 +4,7 @@ import Arm from "./Arm.model"
 export default abstract class Game {
     public static players_id: number[] = []
     private static readonly min_players: number = 2
-    private static readonly max_players: number = 5
+    private static readonly max_players: number = 4
     public static players: Arm[] = []
 
     public static active_player: number = 1 //id player

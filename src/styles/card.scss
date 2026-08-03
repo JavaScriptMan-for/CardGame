@@ -1,13 +1,14 @@
 @use './fonts';
 .card-container {
-    width: 100px;
-    min-height: 150px;
+    width: 5vw;
+    height: 15vh;
     padding: 10px;
     display: flex;
     border: 1px solid black;
     border-radius: 20px;
     flex-direction: row;
     justify-content: space-between;
+    z-index: 1;
 
     .card-angle {
         display: flex;
@@ -22,7 +23,7 @@
         }
         .card-value {
             font-family: "AlegreyaSC-Medium", sans-serif;
-            font-size: 35px;
+            font-size: clamp(20px, 3vw, 35px);
         }
 
         &#up {
@@ -34,4 +35,9 @@
             transform: rotate(180deg);
         }
     }
+}
+
+.defend-card {
+    position: absolute;
+    z-index: 2 !important;
 }

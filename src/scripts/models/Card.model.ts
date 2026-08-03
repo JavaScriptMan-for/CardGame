@@ -19,7 +19,7 @@ export type CardType = Card & SpecialCardType
 
 export default class Card {
     public suit: Suits | null;
-    public readonly color: Colors;
+    public color: Colors;
 
     public player_id: number | null = null;
 
