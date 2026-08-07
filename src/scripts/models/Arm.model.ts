@@ -27,6 +27,7 @@ export default class Arm {
   }
 
   public upCards() {
+    if(Game.testSwitchPlayer() === Game.active_player) return
     if(Table.cards.length < 1) {
       for(let i = 0; i < this.cards.length; i++) {
         this.cards[i].maybe = true
@@ -37,6 +38,28 @@ export default class Arm {
         if(Table.values.some(value => value === this.cards[i].value)) {
           this.cards[i].maybe = true
         }
+      }
+    }
+  }
+
+  public upCardsWhileDefend() {
+    if(Game.testSwitchPlayer() - 1 !== Game.active_player) {
+      console.log(Game.testSwitchPlayer(), Game.active_player)
+      return
+    }
+    const table_cards = Table.cards;
+    for(let i = 0; i < this.cards.length; i++) {
+      
+      if(
+        (table_cards.some(card => this.cards[i].value > card.value && this.cards[i].suit === card.suit))
+         || 
+        (this.cards[i].name === 'joker' && table_cards.some(card => this.cards[i].color === card.color))
+         ||
+         (this.cards[i].suit === Deck.trump_suit && table_cards.every(card => card.suit !== Deck.trump_suit))
+      ) {
+        this.cards[i].maybe = true
+      } else {
+        this.cards[i].maybe = false
       }
     }
   }
@@ -52,7 +75,7 @@ export default class Arm {
       return;
     }
 
-    const targetCard = this.cards[number_card - 1];
+    const targetCard = this.cards[number_card];
 
     if(!targetCard.suit) return
 
@@ -61,7 +84,7 @@ export default class Arm {
       this.value_while_go = targetCard.value;
       this.go_count++;
       Table.putCard(targetCard);
-      this.cards.splice(number_card - 1, 1);
+      this.cards.splice(number_card, 1);
       return;
     }
 
@@ -74,7 +97,7 @@ export default class Arm {
     // Масть совпала — кладём
     this.go_count++;
     Table.putCard(targetCard);
-    this.cards.splice(number_card - 1, 1);
+    this.cards.splice(number_card, 1);
   }
 
   public ready() {
@@ -86,12 +109,12 @@ export default class Arm {
 
   public drop(number_card: number) {
     if(this.can_go) return
-    if(Game.switchPlayer() === this.player_id) return
+    if(Game.testSwitchPlayer() === this.player_id) return
     if(this.cards.length < 1) return
 
     if(Table.cards.length >= 6) return
     
-    const targetCard = this.cards[number_card - 1];
+    const targetCard = this.cards[number_card];
     if(!targetCard.suit) return
 
     const values = Table.values;
@@ -99,34 +122,51 @@ export default class Arm {
     if(!values.some(value => value === targetCard.value)) return
 
     Table.putCard(targetCard)
-    this.cards.splice(number_card - 1, 1);
+    this.cards.splice(number_card, 1);
   }
 
   public pull() {
     if(this.can_go) return
-    if(Game.switchPlayer() !== this.player_id) return
+    if(Game.testSwitchPlayer() !== this.player_id) return
 
     this.cards.push(...Table.cards)
     for(const card of Table.defend_cards) {
       if(card) this.cards.push(card)
     }
+
+    this.cards.forEach(card => card.maybe = false)
+
+    Table.clearTable()
+    
   }
 
   public defend(pos: number, number_card: number) {
-    if(Game.switchPlayer() !== this.player_id) return
-    const targetCard = this.cards[number_card - 1]
+    if(Game.testSwitchPlayer() !== this.player_id) return
+    const targetCard = this.cards[number_card]
     console.log('targetCard', targetCard)
-    const position = pos - 1
+    const position = pos
+
+    const baseCard = Table.cards[position];
+    if (!baseCard) {
+    console.warn("Нет карты на столе в позиции", position);
+    return;
+    }
 
     if(targetCard.name === 'joker' && targetCard.color === Table.cards[position].color) {
       Table.defend_cards[position] = targetCard
-      this.cards.splice(number_card - 1, 1);
+      this.cards.splice(number_card, 1);
+      if (Table.onUpdate) Table.onUpdate();
       return 
     }
 
-    if(targetCard.suit === Table.cards[position].suit && targetCard.value > Table.cards[position].value) {
+    if(
+      (targetCard.suit === Table.cards[position].suit && targetCard.value > Table.cards[position].value)
+      ||
+      (targetCard.suit === Deck.trump_suit && Table.cards[position].suit !== Deck.trump_suit)
+    ) {
       Table.defend_cards[position] = targetCard
-      this.cards.splice(number_card - 1, 1);
+      this.cards.splice(number_card, 1);
+      if (Table.onUpdate) Table.onUpdate();
     } else {return}
   }
 

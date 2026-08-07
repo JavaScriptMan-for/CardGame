@@ -52,6 +52,7 @@ export default abstract class Deck {
         this.cards.push(new Numeric(this.suits[j], null, i));
       }
     }
+    this.mix();
     this.trump_suit = this.cards[0].suit ? this.cards[0].suit : Suits.WORMS
   }
   public static mix() {

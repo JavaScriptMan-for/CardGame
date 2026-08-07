@@ -11,6 +11,8 @@
 
     "isolatedModules": true,
     "noEmit": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
 
     "skipLibCheck": true,
     "strict": true,

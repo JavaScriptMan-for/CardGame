@@ -17,6 +17,7 @@ export type KeysCard = 'jack' | 'lady' | 'king' | 'ace' | 'joker'
 
 export type CardType = Card & SpecialCardType
 
+
 export default class Card {
     public suit: Suits | null;
     public color: Colors;
@@ -24,6 +25,7 @@ export default class Card {
     public player_id: number | null = null;
 
     public maybe: boolean = false
+
 
     constructor(suit: Suits, player_id: number | null) {
         this.suit = suit

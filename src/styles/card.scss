@@ -9,6 +9,7 @@
     flex-direction: row;
     justify-content: space-between;
     z-index: 1;
+    background-color: white;
 
     .card-angle {
         display: flex;
@@ -38,6 +39,12 @@
 }
 
 .defend-card {
-    position: absolute;
+    position: relative;
     z-index: 2 !important;
+    bottom: 30px;
+    right: 50px;
+}
+.empty {
+    filter: blur(15px);
+    background-color: transparent !important;
 }

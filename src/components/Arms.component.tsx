@@ -6,10 +6,11 @@ import { CardType } from "../scripts/models/Card.model";
 interface Props {
     player_id: number,
     cards: CardType[],
-    index: number
+    index: number,
+    isActivity: boolean
 }
 
-const ArmsComponent: FC<Props> = ({ player_id, cards, index }) => {
+const ArmsComponent: FC<Props> = ({ player_id, cards, index, isActivity }) => {
     const [cardsState, setCardsState] = useState<CardType[]>([])
     useEffect(() => {
         setCardsState(cards)
@@ -17,7 +18,7 @@ const ArmsComponent: FC<Props> = ({ player_id, cards, index }) => {
     }, [cards])
     return (
         <div style={ index > 1 ? { alignSelf: 'flex-end', order: index + 1} : {}} className="arm">
-            <p className="player_id">Игрок {player_id}</p>
+            <p className={`player_id ${isActivity ? 'activity' : ''}`}>Игрок {player_id}</p>
             <div className="cards">
             { cardsState &&
                 cardsState.map((card: CardType, index) => 

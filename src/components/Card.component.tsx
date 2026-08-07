@@ -11,12 +11,14 @@ interface Props {
     value: number,
     suit: Suits | null,
     color: Colors,
-    defend?: boolean
+    defend?: boolean,
+    empty?: boolean
 }
 
-const CardComponent: FC<Props> = ({ value, suit, color, defend}) => {
+const CardComponent: FC<Props> = ({ value, suit, color, defend, empty }) => {
 
     const setSuitSrc = useCallback(() => {
+        if(empty) return
         switch(suit) {
             case Suits.PEAK: return peak_img;
             case Suits.CROSS: return cross_img;
@@ -25,6 +27,7 @@ const CardComponent: FC<Props> = ({ value, suit, color, defend}) => {
         }
     }, [suit])
     const setValueCard = useCallback(() => {
+        if(empty) return
         switch(value) {
             case 11: return 'J';
             case 12: return 'Q';
@@ -36,7 +39,9 @@ const CardComponent: FC<Props> = ({ value, suit, color, defend}) => {
     }, [value])
 
     return (
-        <div draggable style={!suit ? { justifyContent: 'center' } : {}} className={`card-container ${defend && 'defend-card'}`}>
+        <div draggable style={!suit ? { justifyContent: 'center' } : {}} className={`card-container ${defend ? 'defend-card' : ''} ${empty ? 'empty' : ''}`}>
+            {!empty &&
+                <>
             <div id="up" className="card-angle">
                 <span className="card-value" style={{ color: color }}>{setValueCard()}</span>
                 {suit && <img draggable={false} className="card-suit" src={setSuitSrc()} alt="suit" />}
@@ -45,6 +50,8 @@ const CardComponent: FC<Props> = ({ value, suit, color, defend}) => {
                 <span className="card-value" style={{ color: color }}>{setValueCard()}</span>
                 <img draggable={false} className="card-suit" src={setSuitSrc()} alt="suit" />
             </div>}
+                </>
+            }
         </div>
     )
 }

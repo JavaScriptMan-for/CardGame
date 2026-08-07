@@ -18,6 +18,18 @@ export default abstract class Game {
         return this.active_player
     }
 
+    public static testSwitchPlayer(count = 1) {
+        let active = this.active_player
+        for(let i = 0; i < count; i++) {
+            if(active !== this.players_id.length) {
+                active += 1 
+            } else {
+                active = 1
+            }
+        }
+        return active
+    }
+
     public static startGame(players: Arm[]) {
         if(this.players_id.length < this.min_players) {
             console.error("Мало игроков")
@@ -32,6 +44,8 @@ export default abstract class Game {
         }
         Deck.createDeck();
         Deck.mix();
+
+        console.log(Deck.trump_suit, ' - козырь')
     }
 
     public static addPlayer(player_id: number) {
