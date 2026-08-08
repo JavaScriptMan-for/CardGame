@@ -1,5 +1,6 @@
 @use './fonts';
 .card-container {
+    position: relative;
     width: 5vw;
     height: 15vh;
     padding: 10px;
@@ -39,12 +40,12 @@
 }
 
 .defend-card {
-    position: relative;
     z-index: 2 !important;
-    bottom: 30px;
-    right: 50px;
+    opacity: 0.1;
 }
 .empty {
-    filter: blur(15px);
     background-color: transparent !important;
+}
+.maybe {
+    bottom: 20px;
 }

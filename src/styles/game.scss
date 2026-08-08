@@ -9,8 +9,26 @@
 
     #table {
         display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
         width: 100%;
         order: 2;
         height: 25vh;
+        gap: 25px;
+
+        #cards {
+            display: flex;
+            flex-direction: row;
+            gap: 50px;
+        }
+        #defend-cards {
+            position: absolute;
+            display: flex;
+            gap: 55px;
+            flex-direction: row;
+            margin-top: -80px;
+            margin-left: 90px;
+        }
     }
 }

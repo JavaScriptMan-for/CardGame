@@ -1,4 +1,4 @@
-import { FC, useCallback } from "react";
+import {  useCallback, forwardRef } from "react";
 import { Colors, Suits } from "../scripts/models/Card.model";
 import "../styles/card.scss"
 
@@ -12,10 +12,11 @@ interface Props {
     suit: Suits | null,
     color: Colors,
     defend?: boolean,
-    empty?: boolean
+    empty?: boolean,
+    isRaised: boolean
 }
 
-const CardComponent: FC<Props> = ({ value, suit, color, defend, empty }) => {
+const CardComponent = forwardRef<HTMLDivElement, Props> (({ value, suit, color, defend, empty, isRaised }, ref) => {
 
     const setSuitSrc = useCallback(() => {
         if(empty) return
@@ -39,7 +40,7 @@ const CardComponent: FC<Props> = ({ value, suit, color, defend, empty }) => {
     }, [value])
 
     return (
-        <div draggable style={!suit ? { justifyContent: 'center' } : {}} className={`card-container ${defend ? 'defend-card' : ''} ${empty ? 'empty' : ''}`}>
+        <div ref={ref} draggable style={!suit ? { justifyContent: 'center' } : {}} className={`card-container ${defend ? 'defend-card' : ''} ${empty ? 'empty' : ''} ${isRaised ? 'maybe' : ''}`}>
             {!empty &&
                 <>
             <div id="up" className="card-angle">
@@ -54,6 +55,6 @@ const CardComponent: FC<Props> = ({ value, suit, color, defend, empty }) => {
             }
         </div>
     )
-}
+})
 
 export default CardComponent

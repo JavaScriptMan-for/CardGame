@@ -14,6 +14,7 @@ export default class Arm {
   private value_while_go: number | null = null;
 
   public isReady: boolean = false
+  public static onUpdate: (() => void) | null = null; //from react
 
   public takeCards() {
     for (let i = this.cards.length; i < this.quantity; i++) {
@@ -31,14 +32,18 @@ export default class Arm {
     if(Table.cards.length < 1) {
       for(let i = 0; i < this.cards.length; i++) {
         this.cards[i].maybe = true
+        Arm.onUpdate && Arm.onUpdate()
       }
       return
     } else {
       for(let i = 0; i < this.cards.length; i++) {
         if(Table.values.some(value => value === this.cards[i].value)) {
           this.cards[i].maybe = true
+        } else {
+          this.cards[i].maybe = false
         }
       }
+      Arm.onUpdate && Arm.onUpdate()
     }
   }
 
