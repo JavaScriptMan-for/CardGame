@@ -29,23 +29,23 @@ export default class Arm {
 
   public upCards() {
     if(Game.testSwitchPlayer() === Game.active_player) return
+
     if(Table.cards.length < 1) {
       for(let i = 0; i < this.cards.length; i++) {
         this.cards[i].maybe = true
-        Arm.onUpdate && Arm.onUpdate()
       }
       return
-    } else {
+    } 
       for(let i = 0; i < this.cards.length; i++) {
         if(Table.values.some(value => value === this.cards[i].value)) {
           this.cards[i].maybe = true
         } else {
           this.cards[i].maybe = false
         }
-      }
-      Arm.onUpdate && Arm.onUpdate()
     }
-  }
+
+    Arm.onUpdate && Arm.onUpdate() 
+}
 
   public upCardsWhileDefend() {
     if(Game.testSwitchPlayer() - 1 !== Game.active_player) {
@@ -174,6 +174,25 @@ export default class Arm {
       if (Table.onUpdate) Table.onUpdate();
     } else {return}
   }
+
+    public translation(card: CardType) {
+      if(Game.testSwitchPlayer() !== this.player_id) return
+      if(!Table.defend_cards.every(card => card === null)) return
+
+      const tableCards = Table.cards
+
+      if(tableCards.every(card => card.value === card.value)) {
+        Table.putCard(card);
+        Game.switchPlayer()
+      }
+    }
+
+    public ticket(card: CardType) {
+      if(Game.testSwitchPlayer() !== this.player_id) return
+      if(card.suit !== Deck.trump_suit) return
+
+      Game.switchPlayer()
+    }
 
   constructor(quantity?: number) {
     this.player_id = Arm.nextId++;

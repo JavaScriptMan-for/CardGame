@@ -1,20 +1,36 @@
 import "../styles/arm.scss";
-import { FC, useEffect, useState, useRef } from "react";
+import { FC, useEffect, useState, useRef, RefObject, Dispatch, SetStateAction} from "react";
 import CardComponent from "./Card.component";
 import { CardType } from "../scripts/models/Card.model";
 import Arm from "../scripts/models/Arm.model";
+import Game from "../scripts/models/Game.model";
+import { useLog } from "../hooks/useLog";
 
 interface Props {
   player_id: number;
   cards: CardType[];
   index: number;
   isActivity: boolean;
-  player: Arm
+  player: Arm;
+  tableCardsRef: RefObject<HTMLDivElement[]>;
+  setPlayers: Dispatch<SetStateAction<Arm[]>>
 }
 
-const ArmsComponent: FC<Props> = ({ player_id, cards, index, isActivity, player }) => {
+const ArmsComponent: FC<Props> = ({
+  player_id,
+  cards,
+  index,
+  isActivity,
+  player,
+  tableCardsRef,
+  setPlayers
+}) => {
   const [cardsState, setCardsState] = useState<CardType[]>([]);
   const cardsElements = useRef<HTMLDivElement[]>([]);
+
+  const [targetCard, setTargetCard] = useState<number | null>(null);
+  const [targetAttack, setTargetAttack] = useState<number | null>(null);
+  
 
   useEffect(() => {
     setCardsState(cards);
@@ -22,13 +38,46 @@ const ArmsComponent: FC<Props> = ({ player_id, cards, index, isActivity, player 
   }, [cards]);
 
   useEffect(() => {
+  if (player_id !== Game.active_player) return;
+
+  player.upCards();
+
+  Arm.onUpdate = () => {
+    setPlayers(Game.players)
+  }
+
+  cardsElements.current.forEach((el, index) => {
+    if (!el) return; // ← защита от null
+    el.ondblclick = (ev: Event) => {
+      ev.preventDefault();
+      player.go(index);
+    };
+  });
+}, [cardsState.length]);
+
+  useEffect(() => {
+    if (Game.testSwitchPlayer() !== player_id) return;
+
+    player.upCardsWhileDefend()
     cardsElements.current.forEach((el, index) => {
-        el.ondblclick = (ev: Event) => {
-            ev.preventDefault()
-            player.go(index)
-        }
-    })
-  }, [cardsState, cardsElements])
+      if (!el) return;
+      el.onclick = () => setTargetCard(index);
+    });
+
+    tableCardsRef.current.forEach((el, index) => {
+      if (!el) return;
+      el.onclick = () => {
+        setTargetAttack(index);
+      };
+    });
+  }, [cardsState.length, tableCardsRef.current.length]);
+
+  useEffect(() => {
+    if(targetCard === null || targetAttack === null) return
+    player.defend(targetAttack, targetCard)
+  }, [targetCard, targetAttack])
+
+  useLog(targetCard, targetAttack, 'defend')
   return (
     <div
       style={index > 1 ? { alignSelf: "flex-end", order: index + 1 } : {}}

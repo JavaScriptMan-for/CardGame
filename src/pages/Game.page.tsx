@@ -1,4 +1,5 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, useRef } from "react";
+
 import '../styles/game.scss'
 import ArmsComponent from "../components/Arms.component";
 import Game from "../scripts/models/Game.model";
@@ -11,14 +12,15 @@ import { CardType, Colors } from "../scripts/models/Card.model";
 
 const GamePage: FC = () => {
     const [players, setPlayers] = useState<Arm[]>([])
-
     const [tableCards, setTableCards] = useState<CardType[]>([])
     const [defendTableCards, setDefendTableCards] = useState<(CardType | null)[]>([])
+
+    const tableCardsElement = useRef<HTMLDivElement[]>([])
 
     useEffect(() => {
        const count_players = 3 //Number(prompt("Сколько игроков будет играть?")) || 2 
         const newPlayers = Array.from({ length: count_players }, () => new Arm())
-        setPlayers(newPlayers);
+        setPlayers(newPlayers)
         Game.startGame(newPlayers)
     }, [])
 
@@ -44,7 +46,8 @@ const GamePage: FC = () => {
 
     useEffect(() => {
         if(players.length < 3) return
-        players[0].upCards()
+        console.log(3123123213);
+        
         Arm.onUpdate = () => {
             setPlayers(Game.players)
         }
@@ -78,7 +81,7 @@ const GamePage: FC = () => {
                 {/**table cards */}
                 <div id="cards">      
                 { tableCards.map((card, index) => 
-                    <CardComponent key={index} suit={card.suit} color={card.color} value={card.value} isRaised={card.maybe}/>
+                    <CardComponent ref={(el) => {tableCardsElement.current[index] = el!}} key={index} suit={card.suit} color={card.color} value={card.value} isRaised={card.maybe}/>
                 )
                 }
                 </div>
@@ -96,7 +99,7 @@ const GamePage: FC = () => {
                 </div>          
             </div>
             {players.map((player: Arm, index) => 
-                <ArmsComponent player={players[index]} index={index} key={index} player_id={player.player_id} cards={player.cards} isActivity={!!(Game.active_player === player.player_id)}/>
+                <ArmsComponent player={players[index]} index={index} key={index} player_id={player.player_id} cards={player.cards} isActivity={!!(Game.active_player === player.player_id)} tableCardsRef={tableCardsElement} setPlayers={setPlayers}/>
             )}
         </div>
     )
