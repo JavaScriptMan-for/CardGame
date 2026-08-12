@@ -34,6 +34,7 @@ export default class Arm {
       for(let i = 0; i < this.cards.length; i++) {
         this.cards[i].maybe = true
       }
+      Arm.onUpdate && Arm.onUpdate() 
       return
     } 
       for(let i = 0; i < this.cards.length; i++) {
